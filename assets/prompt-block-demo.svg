@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="760" viewBox="0 0 1200 760">
+  <rect width="1200" height="760" rx="36" fill="#f8fafc"/>
+  <rect x="80" y="70" width="500" height="530" rx="28" fill="#ffffff" stroke="#e2e8f0"/>
+  <text x="120" y="125" font-family="Inter, Segoe UI, sans-serif" font-size="28" font-weight="800" fill="#1f2937">AI response</text>
+  <text x="120" y="190" font-family="Inter, Segoe UI, sans-serif" font-size="23" fill="#334155">The keyword mismatch problem can</text>
+  <text x="120" y="230" font-family="Inter, Segoe UI, sans-serif" font-size="23" fill="#334155">be handled by translating user terms</text>
+  <text x="120" y="270" font-family="Inter, Segoe UI, sans-serif" font-size="23" fill="#334155">into academic terms.</text>
+  <rect x="116" y="300" width="345" height="42" rx="8" fill="#fef3c7"/>
+  <text x="125" y="329" font-family="Inter, Segoe UI, sans-serif" font-size="22" fill="#92400e">keyword mismatch problem</text>
+  <circle cx="480" cy="318" r="15" fill="#fff7ed" stroke="#f59e0b" stroke-width="3"/>
+  <text x="475" y="326" font-family="Inter, Segoe UI, sans-serif" font-size="18" font-weight="800" fill="#92400e">1</text>
+  <rect x="620" y="70" width="500" height="530" rx="28" fill="#111827"/>
+  <text x="660" y="125" font-family="Inter, Segoe UI, sans-serif" font-size="28" font-weight="800" fill="#ffffff">Compiled prompt</text>
+  <text x="660" y="190" font-family="Inter, Segoe UI, sans-serif" font-size="21" fill="#d1d5db">【批注汇总】</text>
+  <text x="660" y="235" font-family="Inter, Segoe UI, sans-serif" font-size="21" fill="#d1d5db">Please revise the previous answer</text>
+  <text x="660" y="270" font-family="Inter, Segoe UI, sans-serif" font-size="21" fill="#d1d5db">based on these annotations:</text>
+  <text x="660" y="335" font-family="Inter, Segoe UI, sans-serif" font-size="21" fill="#93c5fd">1. For "keyword mismatch problem":</text>
+  <text x="660" y="380" font-family="Inter, Segoe UI, sans-serif" font-size="21" fill="#fef3c7">User note: expand this beyond keyword</text>
+  <text x="660" y="415" font-family="Inter, Segoe UI, sans-serif" font-size="21" fill="#fef3c7">translation. Include abstraction gaps.</text>
+  <text x="660" y="500" font-family="Inter, Segoe UI, sans-serif" font-size="21" fill="#d1d5db">【/批注汇总】</text>
+  <text x="80" y="675" font-family="Inter, Segoe UI, sans-serif" font-size="30" font-weight="800" fill="#1f2937">From inline notes to structured model instructions.</text>
+</svg>
+

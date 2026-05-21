@@ -1,0 +1,238 @@
+#atp-floating-button {
+  position: absolute;
+  z-index: 2147483647;
+  border: 1px solid #1f6feb;
+  border-radius: 999px;
+  background: #0b57d0;
+  color: #fff;
+  cursor: pointer;
+  font: 600 13px/1.2 ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  padding: 7px 12px;
+  box-shadow: 0 8px 28px rgba(15, 23, 42, 0.24);
+  pointer-events: auto;
+  user-select: none;
+}
+
+.atp-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 2147483647;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(15, 23, 42, 0.22);
+}
+
+.atp-modal-card {
+  width: min(560px, calc(100vw - 32px));
+  border: 1px solid rgba(148, 163, 184, 0.28);
+  border-radius: 18px;
+  background: #fffdf8;
+  color: #1f2937;
+  box-shadow: 0 28px 80px rgba(15, 23, 42, 0.28);
+  overflow: hidden;
+}
+
+.atp-modal-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 18px 20px 12px;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.22);
+}
+
+.atp-modal-title {
+  font: 700 16px/1.4 ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+.atp-modal-subtitle {
+  margin-top: 4px;
+  color: #64748b;
+  font: 500 12px/1.5 ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  max-width: 460px;
+}
+
+.atp-icon-button {
+  width: 30px;
+  height: 30px;
+  border: 0;
+  border-radius: 999px;
+  background: #f1f5f9;
+  color: #334155;
+  cursor: pointer;
+  font-size: 22px;
+  line-height: 1;
+}
+
+.atp-note-input {
+  box-sizing: border-box;
+  display: block;
+  width: calc(100% - 40px);
+  min-height: 150px;
+  margin: 18px 20px 10px;
+  border: 1px solid #cbd5e1;
+  border-radius: 14px;
+  background: #ffffff;
+  color: #111827;
+  font: 500 14px/1.7 ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  padding: 13px 14px;
+  resize: vertical;
+  outline: none;
+}
+
+.atp-note-input:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.14);
+}
+
+.atp-modal-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 0 20px 18px;
+}
+
+.atp-counter {
+  color: #64748b;
+  font: 500 12px/1 ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+.atp-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.atp-primary,
+.atp-secondary,
+.atp-marker-menu button {
+  border: 0;
+  border-radius: 12px;
+  cursor: pointer;
+  font: 700 13px/1 ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  padding: 10px 14px;
+}
+
+.atp-primary {
+  background: #0b57d0;
+  color: #fff;
+}
+
+.atp-secondary {
+  background: #e2e8f0;
+  color: #334155;
+}
+
+.atp-highlight {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0) 56%, rgba(250, 204, 21, 0.55) 56%);
+  border-bottom: 2px solid #d97706;
+}
+
+.atp-marker {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 19px;
+  height: 19px;
+  margin: 0 3px;
+  border: 1px solid #d97706;
+  border-radius: 999px;
+  background: #fff7ed;
+  color: #92400e;
+  cursor: pointer;
+  font: 800 11px/1 ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  vertical-align: super;
+}
+
+.atp-marker-menu {
+  position: absolute;
+  z-index: 2147483647;
+  display: grid;
+  gap: 6px;
+  width: 118px;
+  border: 1px solid rgba(148, 163, 184, 0.35);
+  border-radius: 14px;
+  background: #ffffff;
+  padding: 8px;
+  box-shadow: 0 18px 48px rgba(15, 23, 42, 0.2);
+}
+
+.atp-marker-menu button {
+  background: #f8fafc;
+  color: #1f2937;
+  text-align: left;
+}
+
+.atp-marker-menu button:hover,
+.atp-secondary:hover,
+.atp-icon-button:hover {
+  background: #e2e8f0;
+}
+
+.atp-primary:hover,
+#atp-floating-button:hover {
+  background: #0847ad;
+}
+
+.atp-toast {
+  position: fixed;
+  left: 50%;
+  bottom: 32px;
+  z-index: 2147483647;
+  transform: translateX(-50%);
+  border-radius: 999px;
+  background: #111827;
+  color: #fff;
+  font: 700 13px/1 ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  padding: 10px 14px;
+  box-shadow: 0 18px 40px rgba(15, 23, 42, 0.25);
+}
+
+#atp-control-panel {
+  position: fixed;
+  right: 18px;
+  bottom: 92px;
+  z-index: 2147483646;
+  min-width: 220px;
+  border: 1px solid rgba(148, 163, 184, 0.32);
+  border-radius: 18px;
+  background: rgba(255, 253, 248, 0.96);
+  color: #1f2937;
+  box-shadow: 0 22px 60px rgba(15, 23, 42, 0.22);
+  padding: 12px;
+  backdrop-filter: blur(12px);
+}
+
+.atp-control-title {
+  margin-bottom: 4px;
+  color: #334155;
+  font: 800 13px/1.2 ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+.atp-control-hint {
+  margin-bottom: 10px;
+  color: #64748b;
+  font: 600 11px/1.4 ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+.atp-control-actions {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 7px;
+}
+
+.atp-control-actions button {
+  border: 0;
+  border-radius: 12px;
+  background: #f1f5f9;
+  color: #1f2937;
+  cursor: pointer;
+  font: 700 12px/1 ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  padding: 9px 10px;
+  text-align: left;
+}
+
+.atp-control-actions button:hover {
+  background: #dbeafe;
+  color: #0b57d0;
+}

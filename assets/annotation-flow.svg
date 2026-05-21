@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <rect width="1200" height="630" rx="36" fill="#fffaf0"/>
+  <text x="70" y="92" font-family="Inter, Segoe UI, sans-serif" font-size="48" font-weight="800" fill="#1f2937">Annotation to Prompt</text>
+  <text x="72" y="136" font-family="Inter, Segoe UI, sans-serif" font-size="24" fill="#64748b">Highlight AI replies, add inline notes, and compile your feedback into the next prompt.</text>
+  <g transform="translate(70 205)">
+    <rect x="0" y="0" width="230" height="170" rx="24" fill="#f8fafc" stroke="#cbd5e1"/>
+    <text x="30" y="58" font-family="Inter, Segoe UI, sans-serif" font-size="25" font-weight="800" fill="#0f172a">1. Select</text>
+    <text x="30" y="102" font-family="Inter, Segoe UI, sans-serif" font-size="19" fill="#475569">Pick any span in an</text>
+    <text x="30" y="130" font-family="Inter, Segoe UI, sans-serif" font-size="19" fill="#475569">AI response.</text>
+  </g>
+  <g transform="translate(345 205)">
+    <rect x="0" y="0" width="230" height="170" rx="24" fill="#fffbeb" stroke="#f59e0b"/>
+    <text x="30" y="58" font-family="Inter, Segoe UI, sans-serif" font-size="25" font-weight="800" fill="#92400e">2. Annotate</text>
+    <text x="30" y="102" font-family="Inter, Segoe UI, sans-serif" font-size="19" fill="#78350f">Add a note, correction,</text>
+    <text x="30" y="130" font-family="Inter, Segoe UI, sans-serif" font-size="19" fill="#78350f">or instruction.</text>
+  </g>
+  <g transform="translate(620 205)">
+    <rect x="0" y="0" width="230" height="170" rx="24" fill="#eff6ff" stroke="#60a5fa"/>
+    <text x="30" y="58" font-family="Inter, Segoe UI, sans-serif" font-size="25" font-weight="800" fill="#1d4ed8">3. Compile</text>
+    <text x="30" y="102" font-family="Inter, Segoe UI, sans-serif" font-size="19" fill="#1e3a8a">Turn notes into a</text>
+    <text x="30" y="130" font-family="Inter, Segoe UI, sans-serif" font-size="19" fill="#1e3a8a">structured prompt.</text>
+  </g>
+  <g transform="translate(895 205)">
+    <rect x="0" y="0" width="230" height="170" rx="24" fill="#ecfdf5" stroke="#34d399"/>
+    <text x="30" y="58" font-family="Inter, Segoe UI, sans-serif" font-size="25" font-weight="800" fill="#047857">4. Send</text>
+    <text x="30" y="102" font-family="Inter, Segoe UI, sans-serif" font-size="19" fill="#065f46">Review manually, then</text>
+    <text x="30" y="130" font-family="Inter, Segoe UI, sans-serif" font-size="19" fill="#065f46">send when ready.</text>
+  </g>
+  <path d="M300 290h45" stroke="#94a3b8" stroke-width="6" stroke-linecap="round"/>
+  <path d="M575 290h45" stroke="#94a3b8" stroke-width="6" stroke-linecap="round"/>
+  <path d="M850 290h45" stroke="#94a3b8" stroke-width="6" stroke-linecap="round"/>
+  <rect x="220" y="455" width="760" height="72" rx="22" fill="#111827"/>
+  <text x="260" y="500" font-family="Inter, Segoe UI, sans-serif" font-size="24" font-weight="700" fill="#ffffff">A lightweight annotation layer for human-AI workflow refinement.</text>
+</svg>
+
