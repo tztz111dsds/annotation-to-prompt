@@ -443,6 +443,7 @@
 
     document.querySelectorAll(".atp-marker").forEach((node) => node.remove());
     document.querySelectorAll(".atp-note-preview").forEach((node) => node.remove());
+    document.querySelectorAll(".atp-note-connector").forEach((node) => node.remove());
   }
 
   function renderHighlight(annotation) {
@@ -478,12 +479,17 @@
     marker.addEventListener("click", () => openMarkerMenu(annotation, marker));
     highlight.after(marker);
 
-    renderNotePreview(annotation, marker);
+    requestAnimationFrame(() => {
+      renderNotePreview(annotation, marker, message, highlight);
+    });
   }
 
-  function renderNotePreview(annotation, marker) {
+  function renderNotePreview(annotation, marker, message, highlight) {
     document.querySelector(`.atp-note-preview[data-annotation-id="${cssEscape(annotation.id)}"]`)?.remove();
+    document.querySelector(`.atp-note-connector[data-annotation-id="${cssEscape(annotation.id)}"]`)?.remove();
 
+    const markerRect = marker.getBoundingClientRect();
+    const contentRect = getAnnotationContentRect(message, highlight);
     const preview = document.createElement("button");
     preview.className = "atp-note-preview";
     preview.type = "button";
@@ -502,7 +508,121 @@
       openMarkerMenu(annotation, marker);
     });
 
-    marker.after(preview);
+    document.documentElement.appendChild(preview);
+
+    const previewRect = preview.getBoundingClientRect();
+    const viewportWidth = document.documentElement.clientWidth || window.innerWidth;
+    const scrollX = window.scrollX;
+    const scrollY = window.scrollY;
+    const viewportLeft = scrollX + 12;
+    const viewportRight = scrollX + viewportWidth - 12;
+    const rightRailLeft = contentRect.right + scrollX + 22;
+    const leftRailLeft = contentRect.left + scrollX - previewRect.width - 22;
+    const canUseRightRail = rightRailLeft + previewRect.width <= viewportRight;
+    const canUseLeftRail = leftRailLeft >= viewportLeft;
+
+    let previewLeft;
+    let previewTop;
+    let placement;
+
+    if (canUseRightRail) {
+      previewLeft = rightRailLeft;
+      previewTop = markerRect.top + scrollY - 8;
+      placement = "side";
+    } else if (canUseLeftRail) {
+      previewLeft = leftRailLeft;
+      previewTop = markerRect.top + scrollY - 8;
+      placement = "side";
+    } else {
+      previewLeft = Math.max(viewportLeft, Math.min(viewportRight - previewRect.width, contentRect.right + scrollX - previewRect.width));
+      previewTop = markerRect.bottom + scrollY + 14;
+      placement = "below";
+    }
+
+    preview.style.left = `${previewLeft}px`;
+    preview.style.top = `${previewTop}px`;
+    preview.dataset.placement = placement;
+    avoidPreviewOverlap(preview);
+    renderNoteConnector(annotation.id, marker, preview);
+  }
+
+  function getAnnotationContentRect(message, highlight) {
+    const block = highlight.closest?.("p, li, h1, h2, h3, h4, blockquote, pre, table");
+    const blockRect = getValidRect(block);
+    if (blockRect) {
+      return blockRect;
+    }
+
+    const readable = message.querySelector?.(".markdown, .prose, [class*='markdown']");
+    const readableRect = getValidRect(readable);
+    if (readableRect) {
+      return readableRect;
+    }
+
+    return message.getBoundingClientRect();
+  }
+
+  function getValidRect(element) {
+    if (!element) {
+      return null;
+    }
+
+    const rect = element.getBoundingClientRect();
+    if (rect.width < 80 || rect.height <= 0) {
+      return null;
+    }
+
+    return rect;
+  }
+
+  function renderNoteConnector(annotationId, marker, preview) {
+    const markerRect = marker.getBoundingClientRect();
+    const previewRect = preview.getBoundingClientRect();
+    const scrollX = window.scrollX;
+    const scrollY = window.scrollY;
+    const startX = markerRect.left + markerRect.width / 2 + scrollX;
+    const startY = markerRect.top + markerRect.height / 2 + scrollY;
+    const previewLeft = previewRect.left + scrollX;
+    const previewRight = previewRect.right + scrollX;
+    const endX = startX <= previewLeft ? previewLeft : previewRight;
+    const endY = previewRect.top + previewRect.height / 2 + scrollY;
+    const deltaX = endX - startX;
+    const deltaY = endY - startY;
+    const length = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+
+    if (length < 18) {
+      return;
+    }
+
+    const connector = document.createElement("div");
+    connector.className = "atp-note-connector";
+    connector.dataset.annotationId = annotationId;
+    connector.style.left = `${startX}px`;
+    connector.style.top = `${startY}px`;
+    connector.style.width = `${length}px`;
+    connector.style.transform = `rotate(${Math.atan2(deltaY, deltaX)}rad)`;
+    document.documentElement.appendChild(connector);
+  }
+
+  function avoidPreviewOverlap(preview) {
+    const gap = 8;
+    const maxAttempts = 10;
+
+    for (let attempt = 0; attempt < maxAttempts; attempt += 1) {
+      const rect = preview.getBoundingClientRect();
+      const overlapping = Array.from(document.querySelectorAll(".atp-note-preview"))
+        .filter((node) => node !== preview)
+        .some((node) => {
+          const other = node.getBoundingClientRect();
+          return !(rect.right < other.left || rect.left > other.right || rect.bottom + gap < other.top || rect.top > other.bottom + gap);
+        });
+
+      if (!overlapping) {
+        return;
+      }
+
+      preview.style.top = `${parseFloat(preview.style.top || "0") + rect.height + gap}px`;
+    }
   }
 
   function findMessageByKey(messageKey) {
@@ -637,7 +757,7 @@
   }
 
   function handleDocumentClick(event) {
-    if (!event.target.closest?.(".atp-marker, .atp-marker-menu, .atp-modal, #atp-floating-button")) {
+    if (!event.target.closest?.(".atp-marker, .atp-note-preview, .atp-marker-menu, .atp-modal, #atp-floating-button")) {
       closeMarkerMenu();
     }
   }

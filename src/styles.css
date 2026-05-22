@@ -129,46 +129,64 @@
 }
 
 .atp-marker {
+  position: relative;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 19px;
-  height: 19px;
+  width: 18px;
+  height: 18px;
   margin: 0 3px;
-  border: 1px solid #d97706;
+  border: 1px dashed rgba(217, 119, 6, 0.7);
   border-radius: 999px;
-  background: #fff7ed;
+  background: rgba(255, 251, 235, 0.42);
   color: #92400e;
   cursor: pointer;
   font: 800 11px/1 ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   vertical-align: super;
+  box-shadow: 0 0 0 3px rgba(251, 191, 36, 0.08);
+  backdrop-filter: blur(4px);
+}
+
+.atp-marker::after {
+  content: "✎";
+  position: absolute;
+  transform: translate(12px, -10px);
+  color: rgba(146, 64, 14, 0.62);
+  font-size: 10px;
+  font-weight: 700;
+  pointer-events: none;
 }
 
 .atp-note-preview {
+  position: absolute;
+  z-index: 2147483645;
   display: inline-flex;
   align-items: flex-start;
   gap: 8px;
-  max-width: min(320px, 45vw);
+  width: min(280px, 34vw);
   min-height: 28px;
-  margin: 0 6px 3px 4px;
-  border: 1px solid rgba(217, 119, 6, 0.28);
-  border-radius: 14px;
-  background: rgba(255, 251, 235, 0.82);
+  border: 1px solid rgba(217, 119, 6, 0.24);
+  border-radius: 16px;
+  background: rgba(255, 251, 235, 0.68);
   color: #78350f;
   cursor: pointer;
-  box-shadow: 0 14px 34px rgba(120, 53, 15, 0.14);
-  backdrop-filter: blur(10px);
-  padding: 8px 10px;
+  box-shadow: 0 16px 42px rgba(120, 53, 15, 0.1);
+  backdrop-filter: blur(14px);
+  padding: 9px 11px;
   text-align: left;
   transition: opacity 120ms ease, transform 120ms ease, background 120ms ease;
-  vertical-align: middle;
   white-space: normal;
+  opacity: 0.82;
 }
 
 .atp-note-preview:hover {
   background: rgba(255, 251, 235, 0.96);
   opacity: 1;
   transform: translateY(-1px);
+}
+
+.atp-note-preview[data-placement="below"] {
+  opacity: 0.66;
 }
 
 .atp-note-preview-index {
@@ -184,10 +202,26 @@
   font: 800 11px/1 ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
 
+.atp-note-preview-index::before {
+  content: "✍";
+  margin-right: 4px;
+  color: rgba(146, 64, 14, 0.72);
+  font-size: 10px;
+}
+
 .atp-note-preview-text {
   color: #78350f;
   font: 650 12px/1.45 ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   overflow-wrap: anywhere;
+}
+
+.atp-note-connector {
+  position: absolute;
+  z-index: 2147483644;
+  height: 0;
+  border-top: 1.5px dashed rgba(217, 119, 6, 0.42);
+  transform-origin: 0 0;
+  pointer-events: none;
 }
 
 .atp-marker-menu {

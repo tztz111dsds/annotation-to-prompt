@@ -2,8 +2,8 @@
 
 ## Unreleased
 
-- Add semi-transparent annotation preview bubbles near numbered markers.
-- Render preview bubbles as inline translucent chips after markers, avoiding absolute-position failures and reducing text coverage.
+- Add semi-transparent side comment cards connected to markers with light dashed guide lines.
+- Make marker controls lighter and more annotation-like to reduce visual interruption.
 
 ## v0.1.0 - 2026-05-21
 
