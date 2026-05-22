@@ -3,8 +3,7 @@
 ## Unreleased
 
 - Add semi-transparent annotation preview bubbles near numbered markers.
-- Prefer side placement for preview bubbles to avoid covering original text.
-- Add simple collision avoidance when multiple preview bubbles are close together.
+- Render preview bubbles as inline translucent chips after markers, avoiding absolute-position failures and reducing text coverage.
 
 ## v0.1.0 - 2026-05-21
 

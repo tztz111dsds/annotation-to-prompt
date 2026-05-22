@@ -478,16 +478,12 @@
     marker.addEventListener("click", () => openMarkerMenu(annotation, marker));
     highlight.after(marker);
 
-    requestAnimationFrame(() => {
-      renderNotePreview(annotation, marker, message);
-    });
+    renderNotePreview(annotation, marker);
   }
 
-  function renderNotePreview(annotation, marker, message) {
+  function renderNotePreview(annotation, marker) {
     document.querySelector(`.atp-note-preview[data-annotation-id="${cssEscape(annotation.id)}"]`)?.remove();
 
-    const markerRect = marker.getBoundingClientRect();
-    const messageRect = message.getBoundingClientRect();
     const preview = document.createElement("button");
     preview.className = "atp-note-preview";
     preview.type = "button";
@@ -506,50 +502,7 @@
       openMarkerMenu(annotation, marker);
     });
 
-    document.documentElement.appendChild(preview);
-
-    const previewRect = preview.getBoundingClientRect();
-    const viewportWidth = document.documentElement.clientWidth || window.innerWidth;
-    const rightSideLeft = messageRect.right + window.scrollX + 14;
-    const hasRightMargin = rightSideLeft + previewRect.width + 16 <= window.scrollX + viewportWidth;
-
-    if (hasRightMargin) {
-      preview.style.left = `${rightSideLeft}px`;
-      preview.style.top = `${markerRect.top + window.scrollY - 4}px`;
-      preview.dataset.placement = "side";
-      avoidPreviewOverlap(preview);
-      return;
-    }
-
-    const fallbackLeft = Math.min(
-      markerRect.left + window.scrollX,
-      window.scrollX + viewportWidth - previewRect.width - 16
-    );
-    preview.style.left = `${Math.max(window.scrollX + 12, fallbackLeft)}px`;
-    preview.style.top = `${markerRect.bottom + window.scrollY + 8}px`;
-    preview.dataset.placement = "bottom";
-    avoidPreviewOverlap(preview);
-  }
-
-  function avoidPreviewOverlap(preview) {
-    const gap = 8;
-    const maxAttempts = 12;
-
-    for (let attempt = 0; attempt < maxAttempts; attempt += 1) {
-      const rect = preview.getBoundingClientRect();
-      const overlapping = Array.from(document.querySelectorAll(".atp-note-preview"))
-        .filter((node) => node !== preview)
-        .some((node) => {
-          const other = node.getBoundingClientRect();
-          return !(rect.right < other.left || rect.left > other.right || rect.bottom + gap < other.top || rect.top > other.bottom + gap);
-        });
-
-      if (!overlapping) {
-        return;
-      }
-
-      preview.style.top = `${parseFloat(preview.style.top || "0") + rect.height + gap}px`;
-    }
+    marker.after(preview);
   }
 
   function findMessageByKey(messageKey) {

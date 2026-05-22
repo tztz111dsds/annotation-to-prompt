@@ -145,13 +145,12 @@
 }
 
 .atp-note-preview {
-  position: absolute;
-  z-index: 2147483645;
   display: inline-flex;
   align-items: flex-start;
   gap: 8px;
-  max-width: 280px;
+  max-width: min(320px, 45vw);
   min-height: 28px;
+  margin: 0 6px 3px 4px;
   border: 1px solid rgba(217, 119, 6, 0.28);
   border-radius: 14px;
   background: rgba(255, 251, 235, 0.82);
@@ -162,20 +161,14 @@
   padding: 8px 10px;
   text-align: left;
   transition: opacity 120ms ease, transform 120ms ease, background 120ms ease;
+  vertical-align: middle;
+  white-space: normal;
 }
 
 .atp-note-preview:hover {
   background: rgba(255, 251, 235, 0.96);
   opacity: 1;
   transform: translateY(-1px);
-}
-
-.atp-note-preview[data-placement="bottom"] {
-  opacity: 0.72;
-}
-
-.atp-note-preview[data-placement="bottom"]:hover {
-  opacity: 0.98;
 }
 
 .atp-note-preview-index {
