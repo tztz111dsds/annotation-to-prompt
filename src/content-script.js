@@ -444,6 +444,7 @@
     document.querySelectorAll(".atp-marker").forEach((node) => node.remove());
     document.querySelectorAll(".atp-note-preview").forEach((node) => node.remove());
     document.querySelectorAll(".atp-note-connector").forEach((node) => node.remove());
+    document.querySelectorAll(".atp-annotation-host").forEach((node) => node.classList.remove("atp-annotation-host"));
   }
 
   function renderHighlight(annotation) {
@@ -488,6 +489,9 @@
     document.querySelector(`.atp-note-preview[data-annotation-id="${cssEscape(annotation.id)}"]`)?.remove();
     document.querySelector(`.atp-note-connector[data-annotation-id="${cssEscape(annotation.id)}"]`)?.remove();
 
+    const host = getAnnotationHost(message);
+    host.classList.add("atp-annotation-host");
+    const hostRect = host.getBoundingClientRect();
     const markerRect = marker.getBoundingClientRect();
     const contentRect = getAnnotationContentRect(message, highlight);
     const preview = document.createElement("button");
@@ -508,16 +512,14 @@
       openMarkerMenu(annotation, marker);
     });
 
-    document.documentElement.appendChild(preview);
+    host.appendChild(preview);
 
     const previewRect = preview.getBoundingClientRect();
     const viewportWidth = document.documentElement.clientWidth || window.innerWidth;
-    const scrollX = window.scrollX;
-    const scrollY = window.scrollY;
-    const viewportLeft = scrollX + 12;
-    const viewportRight = scrollX + viewportWidth - 12;
-    const rightRailLeft = contentRect.right + scrollX + 22;
-    const leftRailLeft = contentRect.left + scrollX - previewRect.width - 22;
+    const viewportLeft = 12;
+    const viewportRight = viewportWidth - 12;
+    const rightRailLeft = contentRect.right + 22;
+    const leftRailLeft = contentRect.left - previewRect.width - 22;
     const canUseRightRail = rightRailLeft + previewRect.width <= viewportRight;
     const canUseLeftRail = leftRailLeft >= viewportLeft;
 
@@ -526,16 +528,16 @@
     let placement;
 
     if (canUseRightRail) {
-      previewLeft = rightRailLeft;
-      previewTop = markerRect.top + scrollY - 8;
+      previewLeft = rightRailLeft - hostRect.left;
+      previewTop = markerRect.top - hostRect.top - 8;
       placement = "side";
     } else if (canUseLeftRail) {
-      previewLeft = leftRailLeft;
-      previewTop = markerRect.top + scrollY - 8;
+      previewLeft = leftRailLeft - hostRect.left;
+      previewTop = markerRect.top - hostRect.top - 8;
       placement = "side";
     } else {
-      previewLeft = Math.max(viewportLeft, Math.min(viewportRight - previewRect.width, contentRect.right + scrollX - previewRect.width));
-      previewTop = markerRect.bottom + scrollY + 14;
+      previewLeft = Math.max(viewportLeft, Math.min(viewportRight - previewRect.width, contentRect.right - previewRect.width)) - hostRect.left;
+      previewTop = markerRect.bottom - hostRect.top + 14;
       placement = "below";
     }
 
@@ -543,7 +545,11 @@
     preview.style.top = `${previewTop}px`;
     preview.dataset.placement = placement;
     avoidPreviewOverlap(preview);
-    renderNoteConnector(annotation.id, marker, preview);
+    renderNoteConnector(annotation.id, marker, preview, host);
+  }
+
+  function getAnnotationHost(message) {
+    return message.closest?.("article") || message;
   }
 
   function getAnnotationContentRect(message, highlight) {
@@ -575,17 +581,16 @@
     return rect;
   }
 
-  function renderNoteConnector(annotationId, marker, preview) {
+  function renderNoteConnector(annotationId, marker, preview, host) {
+    const hostRect = host.getBoundingClientRect();
     const markerRect = marker.getBoundingClientRect();
     const previewRect = preview.getBoundingClientRect();
-    const scrollX = window.scrollX;
-    const scrollY = window.scrollY;
-    const startX = markerRect.left + markerRect.width / 2 + scrollX;
-    const startY = markerRect.top + markerRect.height / 2 + scrollY;
-    const previewLeft = previewRect.left + scrollX;
-    const previewRight = previewRect.right + scrollX;
+    const startX = markerRect.left - hostRect.left + markerRect.width / 2;
+    const startY = markerRect.top - hostRect.top + markerRect.height / 2;
+    const previewLeft = previewRect.left - hostRect.left;
+    const previewRight = previewRect.right - hostRect.left;
     const endX = startX <= previewLeft ? previewLeft : previewRight;
-    const endY = previewRect.top + previewRect.height / 2 + scrollY;
+    const endY = previewRect.top - hostRect.top + previewRect.height / 2;
     const deltaX = endX - startX;
     const deltaY = endY - startY;
     const length = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
@@ -601,7 +606,7 @@
     connector.style.top = `${startY}px`;
     connector.style.width = `${length}px`;
     connector.style.transform = `rotate(${Math.atan2(deltaY, deltaX)}rad)`;
-    document.documentElement.appendChild(connector);
+    host.appendChild(connector);
   }
 
   function avoidPreviewOverlap(preview) {
