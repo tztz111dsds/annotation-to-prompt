@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+- Add semi-transparent annotation preview bubbles near numbered markers.
+- Prefer side placement for preview bubbles to avoid covering original text.
+- Add simple collision avoidance when multiple preview bubbles are close together.
+
 ## v0.1.0 - 2026-05-21
 
 Initial MVP release.
@@ -13,4 +19,3 @@ Initial MVP release.
 - Store annotations locally in Chrome storage.
 - Isolate annotation cache by saved conversation or transient browser tab.
 - Keep manual-send boundary: the extension never sends prompts automatically.
-
