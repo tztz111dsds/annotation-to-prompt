@@ -5,6 +5,7 @@
 - Add semi-transparent side comment cards connected to markers with light dashed guide lines.
 - Make marker controls lighter and more annotation-like to reduce visual interruption.
 - Anchor comment cards and guide lines inside the matching assistant message so they scroll with the annotated text.
+- Keep side previews inside the ChatGPT main content safe area and shrink them when sidebars reduce available space.
 
 ## v0.1.0 - 2026-05-21
 

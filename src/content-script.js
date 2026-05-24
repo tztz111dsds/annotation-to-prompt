@@ -514,33 +514,39 @@
 
     host.appendChild(preview);
 
-    const previewRect = preview.getBoundingClientRect();
-    const viewportWidth = document.documentElement.clientWidth || window.innerWidth;
-    const viewportLeft = 12;
-    const viewportRight = viewportWidth - 12;
-    const rightRailLeft = contentRect.right + 22;
-    const leftRailLeft = contentRect.left - previewRect.width - 22;
-    const canUseRightRail = rightRailLeft + previewRect.width <= viewportRight;
-    const canUseLeftRail = leftRailLeft >= viewportLeft;
+    const sideGap = 22;
+    const edgeGap = 12;
+    const minPreviewWidth = 156;
+    const maxPreviewWidth = 280;
+    const safeBounds = getSafeViewportBounds(message);
+    const availableRight = safeBounds.right - contentRect.right - sideGap;
+    const availableLeft = contentRect.left - safeBounds.left - sideGap;
 
     let previewLeft;
     let previewTop;
+    let previewViewportLeft;
+    let previewWidth;
     let placement;
 
-    if (canUseRightRail) {
-      previewLeft = rightRailLeft - hostRect.left;
+    if (availableRight >= minPreviewWidth) {
+      previewWidth = Math.min(maxPreviewWidth, availableRight);
+      previewViewportLeft = contentRect.right + sideGap;
       previewTop = markerRect.top - hostRect.top - 8;
       placement = "side";
-    } else if (canUseLeftRail) {
-      previewLeft = leftRailLeft - hostRect.left;
+    } else if (availableLeft >= minPreviewWidth) {
+      previewWidth = Math.min(maxPreviewWidth, availableLeft);
+      previewViewportLeft = contentRect.left - sideGap - previewWidth;
       previewTop = markerRect.top - hostRect.top - 8;
       placement = "side";
     } else {
-      previewLeft = Math.max(viewportLeft, Math.min(viewportRight - previewRect.width, contentRect.right - previewRect.width)) - hostRect.left;
+      previewWidth = Math.min(maxPreviewWidth, Math.max(minPreviewWidth, Math.min(contentRect.width * 0.46, safeBounds.width - edgeGap * 2)));
+      previewViewportLeft = clamp(contentRect.right - previewWidth, safeBounds.left + edgeGap, safeBounds.right - previewWidth - edgeGap);
       previewTop = markerRect.bottom - hostRect.top + 14;
       placement = "below";
     }
 
+    previewLeft = previewViewportLeft - hostRect.left;
+    preview.style.width = `${Math.round(previewWidth)}px`;
     preview.style.left = `${previewLeft}px`;
     preview.style.top = `${previewTop}px`;
     preview.dataset.placement = placement;
@@ -550,6 +556,80 @@
 
   function getAnnotationHost(message) {
     return message.closest?.("article") || message;
+  }
+
+  function getSafeViewportBounds(message) {
+    const edgeGap = 12;
+    const viewportWidth = document.documentElement.clientWidth || window.innerWidth;
+    const viewportLeft = edgeGap;
+    const viewportRight = viewportWidth - edgeGap;
+    const messageRect = message.getBoundingClientRect();
+    const candidateSelectors = ["main", '[role="main"]'];
+    const candidates = [
+      message.closest?.("main"),
+      message.closest?.('[role="main"]'),
+      ...document.querySelectorAll(candidateSelectors.join(","))
+    ].filter(Boolean);
+
+    let safeLeft = viewportLeft;
+    let safeRight = viewportRight;
+
+    for (const candidate of uniqueElements(candidates)) {
+      const rect = getValidRect(candidate);
+      if (!rect || rect.width < 320) {
+        continue;
+      }
+
+      const intersectsMessage = rect.left <= messageRect.right && rect.right >= messageRect.left;
+      if (intersectsMessage) {
+        safeLeft = Math.max(safeLeft, rect.left + edgeGap);
+        safeRight = Math.min(safeRight, rect.right - edgeGap);
+        break;
+      }
+    }
+
+    safeLeft = Math.max(safeLeft, getLeftObstructionRight() + edgeGap);
+
+    if (safeRight - safeLeft < 220) {
+      safeLeft = Math.max(viewportLeft, Math.min(messageRect.left - 24, viewportRight - 220));
+      safeRight = viewportRight;
+    }
+
+    return {
+      left: safeLeft,
+      right: safeRight,
+      width: Math.max(0, safeRight - safeLeft)
+    };
+  }
+
+  function uniqueElements(elements) {
+    return Array.from(new Set(elements));
+  }
+
+  function getLeftObstructionRight() {
+    const viewportHeight = document.documentElement.clientHeight || window.innerHeight;
+    const selectors = [
+      "aside",
+      "nav",
+      '[data-testid*="sidebar" i]',
+      '[class*="sidebar" i]'
+    ];
+
+    return Array.from(document.querySelectorAll(selectors.join(","))).reduce((maxRight, element) => {
+      if (!isVisible(element)) {
+        return maxRight;
+      }
+
+      const rect = element.getBoundingClientRect();
+      const looksLikeLeftRail = rect.left <= 40
+        && rect.width >= 120
+        && rect.width <= 460
+        && rect.right < (document.documentElement.clientWidth || window.innerWidth) * 0.6
+        && rect.top < viewportHeight * 0.55
+        && rect.bottom > viewportHeight * 0.45;
+
+      return looksLikeLeftRail ? Math.max(maxRight, rect.right) : maxRight;
+    }, 0);
   }
 
   function getAnnotationContentRect(message, highlight) {
@@ -579,6 +659,14 @@
     }
 
     return rect;
+  }
+
+  function clamp(value, min, max) {
+    if (max < min) {
+      return min;
+    }
+
+    return Math.max(min, Math.min(max, value));
   }
 
   function renderNoteConnector(annotationId, marker, preview, host) {

@@ -168,7 +168,9 @@
   display: inline-flex;
   align-items: flex-start;
   gap: 8px;
-  width: min(280px, 34vw);
+  box-sizing: border-box;
+  width: min(260px, 30vw);
+  max-width: calc(100vw - 24px);
   min-height: 28px;
   border: 1px solid rgba(217, 119, 6, 0.24);
   border-radius: 16px;
